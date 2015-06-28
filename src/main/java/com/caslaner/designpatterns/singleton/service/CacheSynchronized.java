@@ -12,10 +12,13 @@ public class CacheSynchronized {
 	}
 
 	public static CacheSynchronized get() throws InterruptedException {
-		synchronized (CacheSynchronized.class) {
-			if (cacheSynchronized == null) {
-				Thread.sleep(2000);
-				cacheSynchronized = new CacheSynchronized();
+		//double checked locking
+		if (cacheSynchronized == null) {
+			synchronized (CacheSynchronized.class) {
+				if (cacheSynchronized == null) {
+					Thread.sleep(2000);
+					cacheSynchronized = new CacheSynchronized();
+				}
 			}
 		}
 		return cacheSynchronized;
